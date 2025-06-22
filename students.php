@@ -32,8 +32,9 @@ $students = $stmt->fetchAll();
     </nav>
     <div class="container py-5">
         <div class="card shadow">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">Students List</h4>
+                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addStudentModal">Add Student</button>
             </div>
             <div class="card-body">
                 <table class="table table-bordered table-hover table-striped align-middle">
@@ -76,4 +77,93 @@ $students = $stmt->fetchAll();
             </div>
         </div>
     </div>
+
+    <!-- Add Student Modal -->
+    <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" method="post" action="student_add.php">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addStudentModalLabel">Add Student</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">LRN</label>
+                        <input type="text" name="lrn" class="form-control" required pattern="\d{12}" maxlength="12" inputmode="numeric" title="Please enter exactly 12 digits" autocomplete="off">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">First Name</label>
+                        <input type="text" name="first_name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" name="last_name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Birthdate</label>
+                        <input type="date" name="birthdate" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Gender</label>
+                        <select name="gender" class="form-select" required>
+                            <option value="">Select</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Grade Level</label>
+                        <input type="text" name="grade_level" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Section</label>
+                        <input type="text" name="section" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Add Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Add Student Modal -->
+
+    <!-- Theme Toggle Button -->
+    <button id="theme-toggle" class="btn btn-outline-secondary position-fixed" style="top: 1rem; right: 1rem; z-index: 1050;">
+        Switch to Dark Mode
+    </button>
+
+    <script>
+        // Check saved theme or default to light
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('bg-dark', 'text-light');
+                document.querySelectorAll('.card, .navbar, .table, .form-control, .form-select').forEach(el => {
+                    el.classList.add('bg-dark', 'text-light', 'border-secondary');
+                });
+                document.getElementById('theme-toggle').textContent = 'Switch to Light Mode';
+            } else {
+                document.body.classList.remove('bg-dark', 'text-light');
+                document.querySelectorAll('.card, .navbar, .table, .form-control, .form-select').forEach(el => {
+                    el.classList.remove('bg-dark', 'text-light', 'border-secondary');
+                });
+                document.getElementById('theme-toggle').textContent = 'Switch to Dark Mode';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        // On load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+
+            document.getElementById('theme-toggle').addEventListener('click', function() {
+                const currentTheme = localStorage.getItem('theme') === 'dark' ? 'light' : 'dark';
+                setTheme(currentTheme);
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+</html>

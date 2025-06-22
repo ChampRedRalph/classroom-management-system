@@ -40,12 +40,48 @@ if (isset($_SESSION['user_id'])) {
                     </p>
                     <div class="d-grid gap-2">
                         <a href="students.php" class="btn btn-primary">View Students</a>
-                        <a href="#" class="btn btn-secondary">Manage Classes</a>
+                        <a href="manage_class.php" class="btn btn-secondary">Manage Classes</a>
                         <!-- Add more dashboard actions here -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Theme Toggle Button -->
+    <button id="theme-toggle" class="btn btn-outline-secondary position-fixed" style="top: 1rem; right: 1rem; z-index: 1050;">
+        Switch to Dark Mode
+    </button>
+
+    <script>
+        // Check saved theme or default to light
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('bg-dark', 'text-light');
+                document.querySelectorAll('.card, .navbar, .table, .form-control, .form-select').forEach(el => {
+                    el.classList.add('bg-dark', 'text-light', 'border-secondary');
+                });
+                document.getElementById('theme-toggle').textContent = 'Switch to Light Mode';
+            } else {
+                document.body.classList.remove('bg-dark', 'text-light');
+                document.querySelectorAll('.card, .navbar, .table, .form-control, .form-select').forEach(el => {
+                    el.classList.remove('bg-dark', 'text-light', 'border-secondary');
+                });
+                document.getElementById('theme-toggle').textContent = 'Switch to Dark Mode';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        // On load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+
+            document.getElementById('theme-toggle').addEventListener('click', function() {
+                const currentTheme = localStorage.getItem('theme') === 'dark' ? 'light' : 'dark';
+                setTheme(currentTheme);
+            });
+        });
+    </script>
 </body>
 </html>
