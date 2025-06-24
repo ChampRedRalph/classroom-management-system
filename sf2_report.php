@@ -11,14 +11,25 @@ if (!isset($_SESSION['user_id'])) {
 
 // Get month and school year from query or default to current
 $month = $_GET['month'] ?? date('F');
-$school_year = $_GET['school_year'] ?? '2024-2025';
+$school_year = $_GET['school_year'] ?? '2025-2026';
 
 // Get days in month (for current year)
 $year = date('Y');
 $days_in_month = cal_days_in_month(CAL_GREGORIAN, date('n', strtotime($month)), $year);
 
-// Fetch all students
-$stmt = $pdo->query("SELECT lrn, first_name, last_name FROM tbl_students ORDER BY last_name, first_name");
+// Build an array of valid (non-weekend) days
+$valid_days = [];
+for ($d = 1; $d <= $days_in_month; $d++) {
+    $date_str = sprintf('%04d-%02d-%02d', $year, date('n', strtotime($month)), $d);
+    $day_of_week = date('N', strtotime($date_str)); // 6 = Saturday, 7 = Sunday
+    if ($day_of_week < 6) {
+        $valid_days[] = $d;
+    }
+}
+
+// Fetch all students, sorted by gender (Male first), then by last name, first name
+$stmt = $pdo->query("SELECT lrn, first_name, last_name, gender FROM tbl_students ORDER BY 
+    CASE WHEN gender = 'Male' THEN 0 ELSE 1 END, last_name, first_name");
 $students = $stmt->fetchAll();
 
 // Fetch all attendance for the month
@@ -49,13 +60,26 @@ while ($row = $stmt->fetch()) {
     <title>SF2 - Daily Attendance Report</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .container-fluid {
+            width: 100vw !important;
+            max-width: 100vw !important;
+            padding-left: 0;
+            padding-right: 0;
+        }
         .sf2-table th, .sf2-table td { font-size: 0.85rem; text-align: center; vertical-align: middle; }
         .sf2-table th.rotate { height: 120px; white-space: nowrap; }
         .sf2-table th.rotate > div { transform: translate(0px, 40px) rotate(-90deg); width: 20px; }
+        .table-responsive { overflow-x: auto; }
     </style>
 </head>
 <body class="bg-light">
-<div class="container py-4">
+<div class="container-fluid py-4 sf2-margin" style="padding-left:2vw; padding-right:2vw;">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4>SF2 - Daily Attendance Report of Learners<br>
             <small class="text-muted"><?= htmlspecialchars($month) ?> <?= $school_year ?></small>
@@ -72,59 +96,92 @@ while ($row = $stmt->fetch()) {
     </div>
     <div class="table-responsive">
         <table class="table table-bordered sf2-table">
+            <!-- Table header -->
             <thead class="table-primary">
                 <tr>
-                    <!-- <th rowspan="2">LRN</th> --> <!-- Removed LRN column -->
                     <th rowspan="2">Name</th>
-                    <?php for ($d = 1; $d <= $days_in_month; $d++): ?>
-                        <th class="rotate"><div><?= $d ?></div></th>
-                    <?php endfor; ?>
+                    <?php foreach ($valid_days as $d): ?>
+                        <th ><div><?= $d ?></div></th>
+                    <?php endforeach; ?>
                     <th rowspan="2">Total Present</th>
                     <th rowspan="2">Total Absent</th>
                 </tr>
                 <tr>
-                    <?php for ($d = 1; $d <= $days_in_month; $d++): ?>
-                        <th style="font-size:0.7em;">AM/PM</th>
-                    <?php endfor; ?>
+                    <?php foreach ($valid_days as $d): ?>
+                        <?php
+                            $date_str = sprintf('%04d-%02d-%02d', $year, date('n', strtotime($month)), $d);
+                            $day_letter = strtoupper(substr(date('l', strtotime($date_str)), 0, 1));
+                        ?>
+                        <th style="font-size:0.7em;"><?= $day_letter ?></th>
+                    <?php endforeach; ?>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($students as $student): ?>
-                    <?php
+                <?php
+                $gender_groups = ['Male', 'Female'];
+                $combined_present_per_day = array_fill_keys($valid_days, 0);
+
+                foreach ($gender_groups as $gender) {
+                    $gender_students = array_filter($students, fn($s) => $s['gender'] === $gender);
+                    $present_per_day = array_fill_keys($valid_days, 0);
+
+                    foreach ($gender_students as $student) {
                         $sid = $lrn_to_id[$student['lrn']] ?? null;
+                        echo '<tr>';
+                        echo '<td class="text-start">' . htmlspecialchars($student['last_name'] . ', ' . $student['first_name']) . '</td>';
                         $present = 0;
                         $absent = 0;
-                    ?>
-                    <tr>
-                        <!-- <td><?= htmlspecialchars($student['lrn']) ?></td> --> <!-- Removed LRN cell -->
-                        <td><?= htmlspecialchars($student['last_name'] . ', ' . $student['first_name']) ?></td>
-                        <?php for ($d = 1; $d <= $days_in_month; $d++): ?>
-                            <?php
-                                $am = $attendance[$sid][$d]['am'] ?? '';
-                                $pm = $attendance[$sid][$d]['pm'] ?? '';
-                                $cell = '';
-                                if ($am === 'Present' && $pm === 'Present') {
-                                    $cell = 'P';
-                                    $present++;
-                                } elseif ($am === 'Absent' && $pm === 'Absent') {
-                                    $cell = 'A';
-                                    $absent++;
-                                } elseif ($am === 'Present' && $pm === 'Absent') {
-                                    $cell = '½';
-                                    $present += 0.5; $absent += 0.5;
-                                } elseif ($am === 'Absent' && $pm === 'Present') {
-                                    $cell = '½';
-                                    $present += 0.5; $absent += 0.5;
-                                } else {
-                                    $cell = '';
-                                }
-                            ?>
-                            <td><?= $cell ?></td>
-                        <?php endfor; ?>
-                        <td><?= $present ?></td>
-                        <td><?= $absent ?></td>
-                    </tr>
-                <?php endforeach; ?>
+                        foreach ($valid_days as $d) {
+                            $am = $attendance[$sid][$d]['am'] ?? '';
+                            $pm = $attendance[$sid][$d]['pm'] ?? '';
+                            $cell = '';
+                            $is_present = 0;
+                            if ($am === 'Present' && $pm === 'Present') {
+                                $cell = 'P';
+                                $present++;
+                                $is_present = 1;
+                            } elseif ($am === 'Absent' && $pm === 'Absent') {
+                                $cell = 'A';
+                                $absent++;
+                            } elseif ($am === 'Present' && $pm === 'Absent') {
+                                $cell = '½';
+                                $present += 0.5; $absent += 0.5;
+                                $is_present = 0.5;
+                            } elseif ($am === 'Absent' && $pm === 'Present') {
+                                $cell = '½';
+                                $present += 0.5; $absent += 0.5;
+                                $is_present = 0.5;
+                            }
+                            $present_per_day[$d] += $is_present;
+                            $combined_present_per_day[$d] += $is_present;
+                            echo '<td>' . $cell . '</td>';
+                        }
+                        echo '<td>' . $present . '</td>';
+                        echo '<td>' . $absent . '</td>';
+                        echo '</tr>';
+                    }
+
+                    // Summary row for this gender
+                    if (count($gender_students) > 0) {
+                        echo '<tr style="font-weight:bold;background:#f8f9fa">';
+                        echo '<td>' . $gender . ' Total Present</td>';
+                        foreach ($valid_days as $d) {
+                            echo '<td>' . ($present_per_day[$d] > 0 ? $present_per_day[$d] : '') . '</td>';
+                        }
+                        echo '<td colspan="2"></td>';
+                        echo '</tr>';
+                    }
+                }
+
+                // Combined summary row
+                echo '<tr style="font-weight:bold;background:#e2e3e5">';
+                echo '<td>Combined Total Present</td>';
+                foreach ($valid_days as $d) {
+                    echo '<td>' . ($combined_present_per_day[$d] > 0 ? $combined_present_per_day[$d] : '') . '</td>';
+                }
+                echo '<td colspan="2"></td>';
+                echo '</tr>';
+                ?>
             </tbody>
         </table>
     </div>
