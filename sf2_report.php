@@ -137,18 +137,18 @@ while ($row = $stmt->fetch()) {
                             $cell = '';
                             $is_present = 0;
                             if ($am === 'Present' && $pm === 'Present') {
-                                $cell = 'P';
+                                $cell = ' ';
                                 $present++;
                                 $is_present = 1;
                             } elseif ($am === 'Absent' && $pm === 'Absent') {
                                 $cell = 'A';
                                 $absent++;
                             } elseif ($am === 'Present' && $pm === 'Absent') {
-                                $cell = '½';
+                                $cell = 'HD';
                                 $present += 0.5; $absent += 0.5;
                                 $is_present = 0.5;
                             } elseif ($am === 'Absent' && $pm === 'Present') {
-                                $cell = '½';
+                                $cell = 'HD';
                                 $present += 0.5; $absent += 0.5;
                                 $is_present = 0.5;
                             }
