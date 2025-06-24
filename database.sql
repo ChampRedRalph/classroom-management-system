@@ -34,31 +34,9 @@ CREATE TABLE `tbl_attendance_raw` (
   PRIMARY KEY (`id`),
   KEY `student_id` (`student_id`),
   CONSTRAINT `tbl_attendance_raw_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `tbl_students` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `tbl_attendance_raw` */
-
-insert  into `tbl_attendance_raw`(`id`,`student_id`,`school_year`,`month`,`day`,`day_name`,`am_status`,`pm_status`,`is_tardy`,`date_recorded`) values 
-(21,11,'2024-2025','June',3,'Monday','Present','Present',0,'2025-06-22 21:58:19'),
-(22,11,'2024-2025','June',4,'Tuesday','Present','Present',0,'2025-06-22 21:58:19'),
-(23,11,'2024-2025','June',5,'Wednesday','Present','Absent',1,'2025-06-22 21:58:19'),
-(24,11,'2024-2025','June',6,'Thursday','Absent','Present',0,'2025-06-22 21:58:19'),
-(25,11,'2024-2025','June',7,'Friday','Present','Present',0,'2025-06-22 21:58:19'),
-(26,11,'2024-2025','June',10,'Monday','Present','Present',0,'2025-06-22 21:58:19'),
-(27,11,'2024-2025','June',11,'Tuesday','Present','Present',0,'2025-06-22 21:58:19'),
-(28,11,'2024-2025','June',12,'Wednesday','Absent','Absent',0,'2025-06-22 21:58:19'),
-(29,11,'2024-2025','June',13,'Thursday','Absent','Present',1,'2025-06-22 21:58:19'),
-(30,11,'2024-2025','June',14,'Friday','Present','Present',0,'2025-06-22 21:58:19'),
-(31,11,'2024-2025','June',17,'Monday','Present','Present',0,'2025-06-22 21:58:19'),
-(32,11,'2024-2025','June',18,'Tuesday','Present','Present',0,'2025-06-22 21:58:19'),
-(33,11,'2024-2025','June',19,'Wednesday','Present','Absent',1,'2025-06-22 21:58:19'),
-(34,11,'2024-2025','June',20,'Thursday','Present','Present',0,'2025-06-22 21:58:19'),
-(35,11,'2024-2025','June',21,'Friday','Absent','Present',0,'2025-06-22 21:58:19'),
-(36,11,'2024-2025','June',24,'Monday','Present','Present',0,'2025-06-22 21:58:19'),
-(37,11,'2024-2025','June',25,'Tuesday','Present','Present',0,'2025-06-22 21:58:19'),
-(38,11,'2024-2025','June',26,'Wednesday','Present','Present',0,'2025-06-22 21:58:19'),
-(39,11,'2024-2025','June',27,'Thursday','Present','Absent',1,'2025-06-22 21:58:19'),
-(40,11,'2024-2025','June',28,'Friday','Present','Present',0,'2025-06-22 21:58:19');
 
 /*Table structure for table `tbl_student_attendance` */
 
@@ -101,26 +79,68 @@ CREATE TABLE `tbl_students` (
   `profile_picture` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `lrn` (`lrn`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `tbl_students` */
 
 insert  into `tbl_students`(`id`,`lrn`,`first_name`,`last_name`,`birthdate`,`gender`,`address`,`grade_level`,`section`,`contact_number`,`guardian_name`,`profile_picture`) values 
-(1,'100000000001','Juan','Dela Cruz','2010-01-15','Male','123 Main St','Grade 6','Section 1','09171234501','Maria Dela Cruz',NULL),
-(2,'100000000002','Maria','Santos','2010-02-20','Female','456 Elm St','Grade 6','Section 1','09171234502','Jose Santos',NULL),
-(3,'100000000003','Pedro','Reyes','2010-03-10','Male','789 Oak St','Grade 6','Section 1','09171234503','Ana Reyes',NULL),
-(4,'100000000004','Ana','Garcia','2010-04-05','Female','321 Pine St','Grade 6','Section 1','09171234504','Luis Garcia',NULL),
-(5,'100000000005','Mark','Torres','2010-05-12','Male','654 Maple St','Grade 6','Section 1','09171234505','Carmen Torres',NULL),
-(6,'100000000006','Liza','Mendoza','2010-06-18','Female','987 Birch St','Grade 6','Section 1','09171234506','Mario Mendoza',NULL),
-(7,'100000000007','Carlos','Lopez','2010-07-22','Male','159 Cedar St','Grade 6','Section 1','09171234507','Rosa Lopez',NULL),
-(8,'100000000008','Grace','Ramos','2010-08-30','Female','753 Spruce St','Grade 6','Section 1','09171234508','Pedro Ramos',NULL),
-(9,'100000000009','Miguel','Cruz','2010-09-14','Male','852 Willow St','Grade 6','Section 1','09171234509','Luz Cruz',NULL),
-(10,'100000000010','Ella','Flores','2010-10-25','Female','951 Aspen St','Grade 6','Section 1','09171234510','Juan Flores',NULL),
-(11,'100000000011','Ralph Simon','Mabulay','1988-06-02','Male','357 Poplar St','Grade 6','Section 1','09171234511','Mila Bautista','img/pics/685657131b465_ralph.jpg'),
-(12,'100000000012','Kim','Navarro','2010-12-03','Female','258 Walnut St','Grade 6','Section 1','09171234512','Rico Navarro',NULL),
-(13,'100000000013','Paolo','Gutierrez','2010-01-29','Male','654 Chestnut St','Grade 6','Section 1','09171234513','Dina Gutierrez',NULL),
-(14,'100000000014','Jasmine','Castro','2010-02-17','Female','147 Redwood St','Grade 6','Section 1','09171234514','Oscar Castro','img/pics/68580a58410c1_ralph.png.jpg'),
-(15,'100000000015','Enzo','Morales','2010-03-23','Male','369 Magnolia St','Grade 6','Section 1','09171234515','Tina Morales',NULL);
+(11,'100000000011','Ralph Simon','Mabulay','1988-06-02','Male','357 Poplar St','Grade 7','Generosity','09171234511','Mila Bautista','img/pics/685657131b465_ralph.jpg'),
+(43,'847193650214','CARL VINCENT GUIA','ABLON','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(44,'905127384612','ELMER JR. PANTILO','AGBU','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(45,'738201496570','JHALIL PADERNAL','ARIZ','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(46,'214785963401','IVAN DAVE','BASADRE','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(47,'653290741823','TRAVIS JOHN LUNA','BONBON','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(48,'184739205716','IAN MARK GUMAPON','BOOC','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(49,'579103842167','JUNREY JR. BERNADOS','BURIOL','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(50,'690214783905','CHARLES NIKEE BAHIAN','CABATO','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(51,'841235709621','CHRIST DEE       ABE-ABE','CASTRO','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(52,'710982364152','ABDUL RAHEM SARIP','DACO','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(53,'309186472305','MOHAMMAD FAIZ SARIP','DACO','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(54,'468291037562','GIAN JAMES BALIOS','DAPITON','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(55,'781306924158','PRINCE NATHANIEL JABINIAO','DUHILAG','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(56,'591803247610','JOHN VINCENT SILLOTE','GUMAPON','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(57,'827190436258','ASHTON DANE LEONES','JABENIAR','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(58,'319062748590','KHALIL VALLE','JUSAYAN','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(59,'792364180254','JUREN ACERO','LLEGO','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(60,'658120974386','JEDIAH REUEL','MACABINTA','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(61,'847120963450','BENJO REYES','PACHECO','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(62,'943275081263','ANTONIO JR. ACEBES','PALAMINE','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(63,'406591738209','JAY-R TAYAOTAO','PITOGO','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(64,'385729106483','JAYMAR ABIOG','RAMOS','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(65,'250481937562','LEONARD FERNANDEZ','SUMAPIG','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(66,'612849073185','XIAN AVILA','SURBANO','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(67,'730162594817','ARL JACOB NAINGUE','VALDEHUEZA','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(68,'982301647528','ALGER OBEMIO','VARIACION','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(69,'371840259671','JOHN ROY BUATONA','YBAÑEZ','0000-00-00','Male',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(70,'173820946153','WENSHIEL SUMOBAY','ABIOG','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(71,'862710394512','SHERLINA BINATLAO','AJID','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(72,'920583716240','XANDRA YZABELLE WASAWAS','ANINO','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(73,'408129763580','CLICE HEAVEN','ARTAJO','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(74,'512937048621','CAMELLE ASLAG','BASADRE','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(75,'306491752830','RIXAN NADUMA','BERNADES','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(76,'758024913607','MARY PAULINE','CABALUNA','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(77,'849730265198','SOFIA NICOLE CABALLERO','DERIADA','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(78,'105984237615','LIEZEL LIMBAG','DOSDOS','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(79,'684917203519','PRINCESS MARY GAYONAN','ECOY','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(80,'742086193540','CHELLBER NICE NERI','FELECILDA','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(81,'193840726415','MARRY ITUM','JABINIAO','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(82,'836710254938','PRINCESS XZANNIA ALBIT','JAGUALING','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(83,'620384751096','SAMANTHA DUMAGAT','JORQUIA','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(84,'519684203781','MAYLYN TABAN','LABIAL','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(85,'268491730659','SHAINE MARIE','MONDRAGON','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(86,'301742985106','ALTHEA JENNEL PASQUITO','MORALES','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(87,'985613204879','WILLANE GRACE YACAPIN','OLIVERIO','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(88,'472068153209','JASMINE BONGGAY','PACULBA','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(89,'758290146302','RECHELL SERONA','PALATULON','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(90,'624091385720','RECHIEL MAY EPIS','PERMACIO','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(91,'890427615398','PRECIOUS FLAIR VALLENTE','POLINAR','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(92,'237189654032','RODELYN CAJOTOR','QUILAB','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(93,'318427690584','ROXEL KESHLEIGH KING','REAL','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(94,'671203984157','QUISHA MARIE      SANGO-AN','SALCEDO','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(95,'492830617295','HEART HERSHEY PAMULAGAN','SARAMOSING','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(96,'743982061573','CENAIDAH BOLONIAS','SARIPADA','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(97,'198604732185','JUMALYN CABANLIT','SUMAJIT','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL),
+(98,'581207349106','ELLJIE HIGYAWAN','TINGABNGAB','0000-00-00','Female',NULL,'Grade 7','Generosity',NULL,NULL,NULL);
 
 /*Table structure for table `tbl_users` */
 

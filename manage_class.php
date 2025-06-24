@@ -169,6 +169,7 @@ $total_female = count(array_filter($students, fn($s) => $s['gender'] === 'Female
             </div>
             <div class="card-body">
             <a href="sf2_report.php" class="btn btn-primary" target="_blank">Generate SF2 Attendance Report</a>
+            <a href="attendance_bulk.php" class="btn btn-warning">Bulk Attendance Entry</a>
             </div>
         </div>
         <a href="index.php" class="btn btn-secondary">Back to Dashboard</a>
