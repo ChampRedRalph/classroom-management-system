@@ -81,8 +81,7 @@ while ($row = $stmt->fetch()) {
 <body class="bg-light">
 <div class="container-fluid py-4 sf2-margin" style="padding-left:2vw; padding-right:2vw;">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>SF2 - Daily Attendance Report of Learners<br>
-            <small class="text-muted"><?= htmlspecialchars($month) ?> <?= $school_year ?></small>
+        <h4 class="w-100 text-center">SF2 - Daily Attendance Report of Learners<br>
         </h4>
         <form method="get" class="d-flex align-items-center">
             <select name="month" class="form-select me-2" onchange="this.form.submit()">
@@ -93,6 +92,35 @@ while ($row = $stmt->fetch()) {
             <input type="text" name="school_year" class="form-control me-2" value="<?= htmlspecialchars($school_year) ?>" style="width:120px;" placeholder="SY">
             <button type="submit" class="btn btn-primary btn-sm">Go</button>
         </form>
+
+                    
+    </div>
+    <div class="mb-3">
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-borderless mb-0" style="font-size:1rem;">
+                    <tr>
+                        <td colspan="4" style="padding:0;">
+                            <div style="border:2px solid #333; border-radius:8px; padding:10px; margin-bottom:5px;">
+                                <table style="width:100%; margin-bottom:0;">
+                                    <tr>
+                                        <td><strong>School ID:</strong> 315407</td>
+                                        <td><strong>School Year:</strong> <?= htmlspecialchars($school_year) ?></td>
+                                        <td><strong>Report for the Month of:</strong> <?= htmlspecialchars($month) ?></td>
+                                        <td><strong>Section:</strong> Generosity</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Name of School:</strong> East Gusa National High School</td>
+                                        <td><strong>Grade Level:</strong> Grade 7</td>
+                                        <td colspan="2"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
     <div class="table-responsive">
         <table class="table table-bordered sf2-table">
@@ -102,9 +130,10 @@ while ($row = $stmt->fetch()) {
                     <th rowspan="2">Name</th>
                     <?php foreach ($valid_days as $d): ?>
                         <th ><div><?= $d ?></div></th>
-                    <?php endforeach; ?>
+                    <?php endforeach; ?>    
                     <th rowspan="2">Total Present</th>
                     <th rowspan="2">Total Absent</th>
+                    <th rowspan="2" style="max-width:400px; width:400px;">Remarks</th>
                 </tr>
                 <tr>
                     <?php foreach ($valid_days as $d): ?>
@@ -171,6 +200,7 @@ while ($row = $stmt->fetch()) {
                             echo '<td style="background:#adb5bd;color:#fff;">' . ($present_per_day[$d] > 0 ? $present_per_day[$d] : '') . '</td>';
                         }
                         echo '<td colspan="2" style="background:#adb5bd;color:#fff;"></td>';
+                        echo '<td colspan="2" style="background:#adb5bd;color:#fff;"></td>';
                         echo '</tr>';
                     }
                 }
@@ -181,6 +211,7 @@ while ($row = $stmt->fetch()) {
                 foreach ($valid_days as $d) {
                     echo '<td style="background:#495057;color:#fff;">' . ($combined_present_per_day[$d] > 0 ? $combined_present_per_day[$d] : '') . '</td>';
                 }
+                echo '<td colspan="2" style="background:#495057;color:#fff;"></td>';
                 echo '<td colspan="2" style="background:#495057;color:#fff;"></td>';
                 echo '</tr>';
                 ?>
