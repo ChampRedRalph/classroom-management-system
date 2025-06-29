@@ -31,6 +31,7 @@ $students = $stmt->fetchAll();
 $total_students = count($students);
 $total_male = count(array_filter($students, fn($s) => $s['gender'] === 'Male'));
 $total_female = count(array_filter($students, fn($s) => $s['gender'] === 'Female'));
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -163,15 +164,7 @@ $total_female = count(array_filter($students, fn($s) => $s['gender'] === 'Female
 
         <!-- You can add more sections here, e.g., Announcements, Schedule, etc. -->
 
-        <div class="card shadow mb-4">
-            <div class="card-header bg-success text-white">
-            <h5 class="mb-0">Attendance Report</h5>
-            </div>
-            <div class="card-body">
-            <a href="sf2_report.php" class="btn btn-primary" target="_blank">Generate SF2 Attendance Report</a>
-            <a href="attendance_bulk.php" class="btn btn-warning">Bulk Attendance Entry</a>
-            </div>
-        </div>
+    
         <a href="index.php" class="btn btn-secondary">Back to Dashboard</a>
     </div>
 

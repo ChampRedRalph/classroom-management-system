@@ -136,6 +136,7 @@ while ($row = $stmt->fetch()) {
                             $pm = $attendance[$sid][$d]['pm'] ?? '';
                             $cell = '';
                             $is_present = 0;
+                            $cell_style = '';
                             if ($am === 'Present' && $pm === 'Present') {
                                 $cell = ' ';
                                 $present++;
@@ -143,6 +144,7 @@ while ($row = $stmt->fetch()) {
                             } elseif ($am === 'Absent' && $pm === 'Absent') {
                                 $cell = 'A';
                                 $absent++;
+                                $cell_style = ' style="background:#ffcccc;"'; // Make cell red
                             } elseif ($am === 'Present' && $pm === 'Absent') {
                                 $cell = 'HD';
                                 $present += 0.5; $absent += 0.5;
@@ -154,7 +156,7 @@ while ($row = $stmt->fetch()) {
                             }
                             $present_per_day[$d] += $is_present;
                             $combined_present_per_day[$d] += $is_present;
-                            echo '<td>' . $cell . '</td>';
+                            echo '<td' . $cell_style . '>' . $cell . '</td>';
                         }
                         echo '<td>' . $present . '</td>';
                         echo '<td>' . $absent . '</td>';
@@ -163,23 +165,23 @@ while ($row = $stmt->fetch()) {
 
                     // Summary row for this gender
                     if (count($gender_students) > 0) {
-                        echo '<tr style="font-weight:bold;background:#f8f9fa">';
-                        echo '<td>' . $gender . ' Total Present</td>';
+                        echo '<tr style="font-weight:bold;">';
+                        echo '<td style="background:#adb5bd;color:#fff;">' . $gender . ' Total Present</td>';
                         foreach ($valid_days as $d) {
-                            echo '<td>' . ($present_per_day[$d] > 0 ? $present_per_day[$d] : '') . '</td>';
+                            echo '<td style="background:#adb5bd;color:#fff;">' . ($present_per_day[$d] > 0 ? $present_per_day[$d] : '') . '</td>';
                         }
-                        echo '<td colspan="2"></td>';
+                        echo '<td colspan="2" style="background:#adb5bd;color:#fff;"></td>';
                         echo '</tr>';
                     }
                 }
 
                 // Combined summary row
-                echo '<tr style="font-weight:bold;background:#e2e3e5">';
-                echo '<td>Combined Total Present</td>';
+                echo '<tr style="font-weight:bold;">';
+                echo '<td style="background:#495057;color:#fff;">Combined Total Present</td>';
                 foreach ($valid_days as $d) {
-                    echo '<td>' . ($combined_present_per_day[$d] > 0 ? $combined_present_per_day[$d] : '') . '</td>';
+                    echo '<td style="background:#495057;color:#fff;">' . ($combined_present_per_day[$d] > 0 ? $combined_present_per_day[$d] : '') . '</td>';
                 }
-                echo '<td colspan="2"></td>';
+                echo '<td colspan="2" style="background:#495057;color:#fff;"></td>';
                 echo '</tr>';
                 ?>
             </tbody>

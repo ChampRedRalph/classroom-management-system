@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Fetch students from the database
-$stmt = $pdo->query("SELECT lrn, first_name, last_name, birthdate, gender, grade_level, section FROM tbl_students ORDER BY last_name, first_name");
+$stmt = $pdo->query("SELECT lrn, first_name, last_name, birthdate, gender, grade_level, section FROM tbl_students ORDER BY gender, last_name, first_name");
 $students = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
@@ -41,8 +41,8 @@ $students = $stmt->fetchAll();
                     <thead class="table-primary">
                         <tr>
                             <th>LRN</th>
-                            <th>First Name</th>
                             <th>Last Name</th>
+                            <th>First Name</th>
                             <th>Birthdate</th>
                             <th>Gender</th>
                             <th>Grade Level</th>
@@ -58,8 +58,8 @@ $students = $stmt->fetchAll();
                                             <?= htmlspecialchars($student['lrn']) ?>
                                         </a>
                                     </td>
-                                    <td><?= htmlspecialchars($student['first_name']) ?></td>
                                     <td><?= htmlspecialchars($student['last_name']) ?></td>
+                                    <td><?= htmlspecialchars($student['first_name']) ?></td>
                                     <td><?= htmlspecialchars($student['birthdate']) ?></td>
                                     <td><?= htmlspecialchars($student['gender']) ?></td>
                                     <td><?= htmlspecialchars($student['grade_level']) ?></td>
