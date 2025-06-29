@@ -47,19 +47,52 @@ if (isset($_SESSION['user_id'])) {
             </div>
         </div>
     </div>
-
-    <!-- Students with High Absences Table -->
     <?php
     require 'db_connect.php';
 
+    // Fetch all students (include birthdate)
+    $stmt = $pdo->query("SELECT lrn, first_name, last_name, gender, birthdate FROM tbl_students");
+    $students = $stmt->fetchAll();
+
+    // Birthday celebrants today
+    $today = date('m-d');
+    $birthday_students = [];
+    foreach ($students as $student) {
+        if (!empty($student['birthdate'])) {
+            $bday = date('m-d', strtotime($student['birthdate']));
+            if ($bday === $today) {
+                $birthday_students[] = $student;
+            }
+        }
+    }
+    ?>
+
+    <?php if (count($birthday_students) > 0): ?>
+        <div class="container" style="max-width: 1000px; margin: 2rem auto;">
+            <div class="card shadow mb-4 border-success">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">🎉 Birthday Celebrant<?= count($birthday_students) > 1 ? 's' : '' ?> Today</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <?php foreach ($birthday_students as $s): ?>
+                            <li class="list-group-item">
+                                <strong><?= htmlspecialchars($s['last_name'] . ', ' . $s['first_name']) ?></strong>
+                                (<?= htmlspecialchars($s['gender']) ?>)
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+    
+    <!-- Students with High Absences Table -->
+    <?php
     // Get current month and school year
     $currentMonth = date('F');
     $currentYear = date('Y');
     $school_year = date('Y') . '-' . (date('n') >= 6 ? date('Y', strtotime('+1 year')) : date('Y')); // Adjust as needed
-
-    // Fetch all students
-    $stmt = $pdo->query("SELECT lrn, first_name, last_name, gender FROM tbl_students");
-    $students = $stmt->fetchAll();
 
     // Get absences for each student for the current month
     $high_absent_students = [];
@@ -122,21 +155,29 @@ if (isset($_SESSION['user_id'])) {
 
     <!-- Prepare attendance data for the past 5 days -->
     <?php
-    // Prepare attendance data for the past 5 days
+    // Prepare attendance data for the past 5 days (excluding Saturdays and Sundays)
     $attendance_dates = [];
     $attendance_counts = [];
     $school_year = date('Y') . '-' . (date('n') >= 6 ? date('Y', strtotime('+1 year')) : date('Y')); // same as above
 
-    for ($i = 0; $i < 5; $i++) { // Start from 0 to 4 so the last day is the latest
-        $date = date('Y-m-d', strtotime("-$i days"));
-        $attendance_dates[] = $date;
-        $day = date('j', strtotime($date));
-        $month = date('F', strtotime($date));
+    $days_collected = 0;
+    $days_checked = 0;
+    while ($days_collected < 5) {
+        $date = date('Y-m-d', strtotime("-$days_checked days"));
+        $day_of_week = date('N', strtotime($date)); // 6 = Saturday, 7 = Sunday
+        if ($day_of_week < 6) { // Only Monday to Friday
+            $attendance_dates[] = $date;
+            $day = date('j', strtotime($date));
+            $month = date('F', strtotime($date));
 
-        // Count present students (both AM and PM present)
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM tbl_attendance_raw WHERE day = ? AND month = ? AND school_year = ? AND am_status = 'Present' AND pm_status = 'Present'");
-        $stmt->execute([$day, $month, $school_year]);
-        $attendance_counts[] = (int)$stmt->fetchColumn();
+            // Count present students (both AM and PM present)
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM tbl_attendance_raw WHERE day = ? AND month = ? AND school_year = ? AND am_status = 'Present' AND pm_status = 'Present'");
+            $stmt->execute([$day, $month, $school_year]);
+            $attendance_counts[] = (int)$stmt->fetchColumn();
+
+            $days_collected++;
+        }
+        $days_checked++;
     }
     // Reverse arrays so the latest day is last
     $attendance_dates = array_reverse($attendance_dates);
