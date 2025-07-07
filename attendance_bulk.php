@@ -68,16 +68,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <table class="table table-bordered align-middle">
             <thead class="table-light">
                 <tr>
+                    <th style="width:200px;">Attendance</th>
                     <th>Name</th>
                     <th>Gender</th>
-                    <th style="width:200px;">Attendance</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($students as $student): ?>
                     <tr>
-                        <td><?= htmlspecialchars($student['last_name'] . ', ' . $student['first_name']) ?></td>
-                        <td><?= htmlspecialchars($student['gender']) ?></td>
                         <td>
                             <select name="attendance[<?= htmlspecialchars($student['lrn']) ?>]" class="form-select attendance-select" required>
                                 <option value="">Select</option>
@@ -120,6 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             });
                             </script>
                         </td>
+                        <td><?= htmlspecialchars($student['last_name'] . ', ' . $student['first_name']) ?></td>
+                        <td><?= htmlspecialchars($student['gender']) ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
